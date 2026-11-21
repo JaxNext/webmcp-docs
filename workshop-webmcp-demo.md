@@ -10,112 +10,151 @@ can expose to an AI agent.
 The workshop needs a demo web app to modify. Which kind of pure front-end demo best
 suits the goal, and has features that only WebMCP — not MCP — can adapt to an agent?
 
-## Core principle: what makes it "only WebMCP, not MCP"
+## Core principle: the "chatbox test"
 
-From `chrome-blog/webmcp/compare-mcp.md`, the decisive rows are *where the code runs*
-and *whose login it uses*:
+The decisive test is not "does the state live in the tab" — it is "can the agent's answer
+be delivered as text?"
 
-- MCP is a call center: runs on a **server**, uses its **own credentials**, always available.
-- WebMCP is an in-store expert: runs in the **page's JS runtime**, uses the **user's current
-  session**, and is **ephemeral** (gone when the tab closes).
+- If the result can be fully expressed as text in a chat — a plan, a list, a booking, a
+  budget — then MCP (or no protocol at all) is *more* convenient. The user does not need
+  a page open to receive text.
+- If the result is something the user must **see** and then **operate on** in the page —
+  a drawing, a filtered photo, a diagram's layout, a calendar with overlaps, a map with
+  pins — then WebMCP wins. That visual output has no faithful textual form, and the user
+  continues to act on it in-session.
 
-So the demo must keep its "brains" entirely in the client — state in memory,
-`localStorage`, or IndexedDB, rendered client-side — and the target action must be
-in-context and in-session. A backend MCP cannot reach that state: there is no server
-and no API to call.
+This is the same "call-center vs in-store expert" split from
+`chrome-blog/webmcp/compare-mcp.md`, applied to the *output modality* rather than the
+*execution location*:
 
-Screening question for any candidate demo: *"If I removed all the HTML and gave the app
-to an MCP server, could the agent still do the task?"* If yes, it is the wrong demo. If no —
-the state exists only in the open tab — it is the right demo.
+- MCP is a call center: text in, text out, always available, no shared visual context.
+- WebMCP is an in-store expert: the deliverable is the live page the user is looking at,
+  and the agent acts on it in the user's own session.
 
-## Recommended demo: client-state trip/event planner
+Screening question for any candidate demo: *"Can I give the user the full result as a
+chat message?"* If yes, MCP wins and the demo is wrong. If the result has to be seen on
+screen to be understood or used, it is a WebMCP demo.
 
-Chosen as the primary demo because it satisfies "both APIs" naturally.
+## Rejected: trip/event planner
+
+A trip planner fails the chatbox test. Its deliverable — an itinerary, a filtered list, a
+running total — is pure text. An agent in a chat can produce that without the user ever
+opening the site, so MCP is the *more* convenient choice, not the less convenient one.
+Forcing the user to keep a page open adds friction without adding value.
+
+## Recommended demo: canvas drawing / whiteboard
+
+A freeform drawing app is the primary demo because its output has **no textual
+representation at all** — there is no text the agent could return that equals a drawing.
+It is the purest instance of the chatbox test, and therefore the most unassailable
+"only WebMCP, not MCP" argument.
 
 Why it fits:
 
-- Pure front end, zero backend.
-- Rich client-side state (search results, filters, plan items, running total) that a
-  server cannot reach.
-- A natural multi-step flow — search → filter → add → refine → finalize — matching the
-  shopping and travel examples in `chrome-blog/webmcp-user-journeys/use-cases.md`.
-- Splits cleanly into imperative tools plus one declarative form.
+- Pure front end, zero backend; all state (shapes, colors, undo stack) lives in the page's
+  JavaScript, so a backend MCP has nothing to call.
+- The user must see the canvas to understand the result, and continues to operate on it
+  (recolor, move, delete) in-session.
+- DOM-scraping actuation cannot meaningfully drive a `<canvas>` — there are no clickable
+  elements for an agent to find, so WebMCP tools are the *only* reliable path.
+
+### It supports both APIs (correcting an earlier assumption)
+
+A canvas app is **not** imperative-only. Its tool palette is made of real form elements:
+
+- `<input type="color">` for brush/fill color
+- `<input type="range">` for stroke width
+- `<select>` for shape / tool selection
+- `<input type="checkbox">` for fill vs stroke
+
+Annotate that palette as a `<form toolname=… tooldescription=… toolautosubmit>` and it
+becomes a first-class declarative WebMCP tool. So the same app teaches the declarative
+API (the palette) and the imperative API (drawing operations) cleanly.
 
 ### Tool surface
 
-Imperative (JavaScript):
+Imperative (JavaScript) — the drawing operations:
 
-- `search_destinations(query, filters)`
-- `add_activity(item, qty)`
-- `remove_activity(item_id)`
-- `filter_by_budget(max)`
-- `reorder_plan(items[])`
-- `get_plan_total()`
-- `finalize_plan()` — requires user confirmation, demonstrating a sensitive action.
+- `draw_shape(type, x, y, w, h, color)` — rect, ellipse, line, freehand
+- `add_text(text, x, y)`
+- `set_tool(tool)` / `set_color(color)` / `set_stroke_width(px)` — or expose these
+  declaratively via the palette
+- `select_shape(id)`, `delete_shape(id)`
+- `undo()`, `clear()`
+- `export_png()` — requires user confirmation, demonstrating a sensitive action
 
-Declarative (annotated HTML form), modeled on the timesheet/car-search examples:
+Declarative (annotated HTML form) — the brush/tool palette:
 
 ```html
-<form toolname="add_trip_item"
-  tooldescription="Add an activity to the current trip plan."
+<form toolname="configure_brush"
+  tooldescription="Set the brush color, stroke width, and drawing tool."
   toolautosubmit>
-  <!-- date / type / cost fields with toolparamdescription -->
+  <label for="color">Brush color</label>
+  <input id="color" name="color" type="color" toolparamdescription="Brush color.">
+
+  <label for="width">Stroke width</label>
+  <input id="width" name="width" type="range" min="1" max="40"
+    toolparamdescription="Stroke width in pixels.">
+
+  <label for="tool">Tool</label>
+  <select id="tool" name="tool" toolparamdescription="Drawing tool to activate.">
+    <option value="brush">Brush</option>
+    <option value="rect">Rectangle</option>
+    <option value="ellipse">Ellipse</option>
+  </select>
 </form>
 ```
 
 ### What to show before and after
 
-Before: an ordinary SPA — search bar, activity list with filters, plan panel with a
-running total, confirm dialog. No network calls.
+Before: an ordinary whiteboard — a `<canvas>`, a tool palette, an undo button, a clear
+button. No network calls.
 
-After: the same app with imperative tools registered and one form annotated. Two
-attributes are enough to make the form agent-callable.
+After: the same app with the drawing operations registered as imperative tools and the
+palette form annotated as a declarative tool. The live talk runs the same natural-language
+prompt twice — once against the un-instrumented canvas (actuation fails / guesses) and
+once with WebMCP (the agent calls tools and the drawing visibly appears).
 
 ### "Only WebMCP" moments to hit during the talk
 
-1. **State lives in the tab** — an MCP server cannot read `localStorage` or the
-   in-memory plan; only in-page tools can.
-2. **User session, not server credentials** — there is no login or backend; WebMCP acts
-   on the user's own open session.
-3. **Visible actuation builds trust** — tool calls visibly mutate the user's page, which
-   is what the `finalize_plan()` confirmation is there to demonstrate.
+1. **A drawing has no text form** — no chat message can reproduce it, so MCP cannot deliver
+   this task at all.
+2. **Agents can't click canvas pixels** — actuation has nothing to grab; WebMCP tools are
+   the only reliable route.
+3. **The palette is the declarative API** — annotating real `<input>`/`<select>` elements
+   is all it takes to make the brush controls agent-callable.
+4. **Visible actuation builds trust** — tool calls visibly mutate the user's canvas, which
+   the `export_png()` confirmation is there to demonstrate.
 
 ## Alternatives considered
 
-1. **Canvas / creative app** (drawing or diagram editor) — the strongest "only WebMCP"
-   contrast, because DOM-scraping actuation cannot meaningfully operate on canvas
-   pixels. However, its tools are imperative-only (`draw_shape`, `set_color`, `undo`,
-   `export_png`); there is no natural HTML form to annotate, so the declarative half of
-   the workshop would feel forced. Best kept as a short stretch exercise.
-2. **Shopping list / cart** — mirrors the "Jesse" shopping journey in the docs. Good, but
-   narrower than the trip planner.
-3. **Form-heavy tool** (timesheet, car search, warranty claim) — best for teaching the
-   declarative API in isolation; the "only WebMCP" contrast is weaker unless submission
-   is entirely client-side.
+1. **Diagram / flowchart builder** — richest agent tasks and very dev-relatable ("sketch me
+   the auth flow"). Slightly weaker on the chatbox test because flowcharts have a textual
+   fallback (Mermaid); the talk would need a prepared rebuttal ("Mermaid renders a static
+   diagram; WebMCP operates the user's live, interactive canvas").
+2. **Photo filter editor** — "must see the filtered result" is visceral, and sliders/dropdowns
+   are a natural declarative demo. Good runner-up.
+3. **Calendar / scheduling board** — strong "must see the overlaps" story, but models more
+   state than a canvas app.
+4. **Trip planner / shopping list** — rejected: text-in/text-out, so MCP is more convenient.
 
 ## Decisions made
 
-- **Domain:** trip/event planner as the primary demo; canvas/creative tools as an
-  optional stretch exercise.
-- **API coverage:** both imperative and declarative.
-- **Stack:** vanilla JavaScript, so the WebMCP API is the focus rather than framework
-  setup.
-
-## Suggested canvas stretch (15 minutes)
-
-Take a small `<canvas>` doodle app and expose `set_color`, `draw_shape`, and `undo` as
-imperative tools. Payoff line for the audience: an agent scraping the DOM cannot click
-on canvas pixels at all; WebMCP is the only reliable way to drive this kind of app.
+- **Primary demo:** canvas drawing / whiteboard.
+- **API coverage:** both imperative (drawing operations) and declarative (tool palette form).
+- **Stack:** vanilla JavaScript, so the WebMCP API is the focus rather than framework setup.
 
 ## Reference material in this repo
 
-- `chrome-blog/webmcp/compare-mcp.md` — MCP vs WebMCP comparison table.
-- `chrome-blog/webmcp-user-journeys/use-cases.md` — shopping, forms, filtering journeys.
+- `chrome-blog/webmcp/compare-mcp.md` — MCP vs WebMCP comparison table (call center vs
+  in-store expert).
+- `chrome-blog/webmcp-user-journeys/use-cases.md` — shopping, forms, filtering journeys
+  (used to stress-test and reject the trip planner).
 - `chrome-blog/webmcp/get-started.md` — origin trial flag, demo list, agent extensions.
 - `chrome-blog/webmcp/imperative-api.md`, `declarative-api.md` — API details.
 - `webmcp-spec.md` — normative text.
 
 ## Next step
 
-Draft the trip-planner demo spec: file layout, tool definitions with JSON schemas, the
-declarative form, and a before/after narrative for the workshop.
+Draft the drawing/whiteboard demo spec: file layout, imperative tool definitions with
+JSON schemas, the palette declarative form, and a before/after narrative for the workshop.
