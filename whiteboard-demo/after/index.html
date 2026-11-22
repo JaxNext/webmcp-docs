@@ -52,6 +52,29 @@
 
   <canvas id="board" width="900" height="600"></canvas>
 
+  <section id="record" aria-live="polite">
+    <header id="record-header">
+      <h2>Tool call record</h2>
+      <button id="record-reset" type="button">Reset</button>
+    </header>
+    <dl id="record-summary">
+      <div>
+        <dt>Calls</dt>
+        <dd id="record-calls">0</dd>
+      </div>
+      <div>
+        <dt>Elapsed time</dt>
+        <dd id="record-time">0 ms</dd>
+      </div>
+      <div>
+        <dt>Token footprint (est.)</dt>
+        <dd id="record-tokens">0</dd>
+      </div>
+    </dl>
+    <ol id="record-list"></ol>
+    <p id="record-note">Elapsed time is wall-clock from the first tool call to the last. Token count estimates the schema + call payloads the page adds to the model context — the agent's reasoning tokens aren't visible to the page.</p>
+  </section>
+
   <script src="app.js"></script>
   <script src="tools.js"></script>
 </body>
