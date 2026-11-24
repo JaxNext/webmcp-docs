@@ -66,3 +66,80 @@ h1 { font-size: 20px; margin: 0; }
   touch-action: none;
   cursor: crosshair;
 }
+
+/* --- Generative panel ---------------------------------------------------- */
+
+#generative {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid #e3e6ea;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+#generative h2 {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #5b6472;
+}
+
+.gen-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid #edf0f3;
+  border-radius: 6px;
+}
+
+.gen-group h3 {
+  margin: 0 4px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.gen-group label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #3a4250;
+}
+
+.gen-group input[type="range"] { width: 110px; }
+
+.gen-group output {
+  min-width: 2.5ch;
+  font-variant-numeric: tabular-nums;
+  color: #5b6472;
+}
+
+.gen-group button {
+  padding: 6px 14px;
+  font-size: 13px;
+  border: 1px solid #1e88e5;
+  background: #1e88e5;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.gen-group button:hover { background: #1874c4; }
+
+.gen-group button.secondary {
+  border-color: #d4d9e0;
+  background: #fff;
+  color: #3a4250;
+}
+
+.gen-group button.secondary:hover { background: #eef1f5; }
+
+.gen-group input[type="number"] { width: 90px; }

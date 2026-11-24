@@ -35,6 +35,19 @@
       <input id="brush-fill" name="fill" type="checkbox">
       Fill shapes
     </label>
+
+    <label for="symmetry-mode">Symmetry
+      <select id="symmetry-mode" name="symmetry">
+        <option value="none">None</option>
+        <option value="rotation">Rotation</option>
+        <option value="mirror">Mirror</option>
+      </select>
+    </label>
+
+    <label for="symmetry-fold">Fold
+      <input id="symmetry-fold" name="fold" type="range" min="2" max="16" step="1" value="6">
+      <output id="symmetry-fold-out" for="symmetry-fold">6</output>
+    </label>
   </div>
 
   <div id="toolbar">
@@ -42,6 +55,206 @@
     <button id="clear-btn" type="button">Clear</button>
     <button id="export-btn" type="button">Export PNG</button>
   </div>
+
+  <section id="generative">
+    <h2>Generative</h2>
+
+    <div class="gen-group">
+      <h3>Flow field</h3>
+      <label for="flow-particles">Particles
+        <input id="flow-particles" type="range" min="200" max="4000" step="100" value="1500">
+        <output id="flow-particles-out" for="flow-particles">1500</output>
+      </label>
+      <label for="flow-scale">Noise scale
+        <input id="flow-scale" type="range" min="1" max="20" step="1" value="6">
+        <output id="flow-scale-out" for="flow-scale">6</output>
+      </label>
+      <label for="flow-hue">Hue
+        <input id="flow-hue" type="range" min="0" max="359" step="1" value="200">
+        <output id="flow-hue-out" for="flow-hue">200</output>
+      </label>
+      <label for="flow-dark">
+        <input id="flow-dark" type="checkbox" checked>
+        Dark background
+      </label>
+      <label for="flow-seed">Seed
+        <input id="flow-seed" type="number" min="1" value="1">
+      </label>
+      <button id="flow-randomize" class="secondary" type="button">Randomize</button>
+      <button id="flow-generate" type="button">Generate flow field</button>
+    </div>
+
+    <div class="gen-group">
+      <h3>Recursive tree</h3>
+      <label for="tree-depth">Depth
+        <input id="tree-depth" type="range" min="3" max="11" step="1" value="8">
+        <output id="tree-depth-out" for="tree-depth">8</output>
+      </label>
+      <label for="tree-angle">Angle
+        <input id="tree-angle" type="range" min="10" max="60" step="1" value="28">
+        <output id="tree-angle-out" for="tree-angle">28</output>
+      </label>
+      <label for="tree-branches">Branches
+        <input id="tree-branches" type="range" min="2" max="5" step="1" value="2">
+        <output id="tree-branches-out" for="tree-branches">2</output>
+      </label>
+      <label for="tree-seed">Seed
+        <input id="tree-seed" type="number" min="1" value="1">
+      </label>
+      <button id="tree-randomize" class="secondary" type="button">Randomize</button>
+      <button id="tree-grow" type="button">Grow tree</button>
+    </div>
+
+    <div class="gen-group">
+      <h3>Spirograph</h3>
+      <label for="spiro-R">Outer radius
+        <input id="spiro-R" type="range" min="60" max="220" step="5" value="180">
+        <output id="spiro-R-out" for="spiro-R">180</output>
+      </label>
+      <label for="spiro-r">Rolling radius
+        <input id="spiro-r" type="range" min="20" max="120" step="1" value="65">
+        <output id="spiro-r-out" for="spiro-r">65</output>
+      </label>
+      <label for="spiro-d">Pen offset
+        <input id="spiro-d" type="range" min="20" max="180" step="1" value="90">
+        <output id="spiro-d-out" for="spiro-d">90</output>
+      </label>
+      <label for="spiro-turns">Turns
+        <input id="spiro-turns" type="range" min="50" max="600" step="10" value="300">
+        <output id="spiro-turns-out" for="spiro-turns">300</output>
+      </label>
+      <button id="spiro-randomize" class="secondary" type="button">Randomize</button>
+      <button id="spiro-draw" type="button">Draw spirograph</button>
+    </div>
+
+    <div class="gen-group">
+      <h3>Particle life</h3>
+      <label for="life-particles">Particles
+        <input id="life-particles" type="range" min="150" max="800" step="50" value="500">
+        <output id="life-particles-out" for="life-particles">500</output>
+      </label>
+      <label for="life-types">Types
+        <input id="life-types" type="range" min="2" max="5" step="1" value="3">
+        <output id="life-types-out" for="life-types">3</output>
+      </label>
+      <label for="life-seed">Seed
+        <input id="life-seed" type="number" min="1" value="1">
+      </label>
+      <button id="life-randomize" class="secondary" type="button">Randomize</button>
+      <button id="life-run" type="button">Run particle life</button>
+    </div>
+
+    <div class="gen-group">
+      <h3>Truchet tiles</h3>
+      <label for="truchet-size">Tile size
+        <input id="truchet-size" type="range" min="15" max="60" step="1" value="30">
+        <output id="truchet-size-out" for="truchet-size">30</output>
+      </label>
+      <label for="truchet-seed">Seed
+        <input id="truchet-seed" type="number" min="1" value="1">
+      </label>
+      <button id="truchet-randomize" class="secondary" type="button">Randomize</button>
+      <button id="truchet-draw" type="button">Draw truchet</button>
+    </div>
+
+    <div class="gen-group">
+      <h3>Mondrian</h3>
+      <label for="mondrian-min">Min size
+        <input id="mondrian-min" type="range" min="20" max="120" step="5" value="50">
+        <output id="mondrian-min-out" for="mondrian-min">50</output>
+      </label>
+      <label for="mondrian-seed">Seed
+        <input id="mondrian-seed" type="number" min="1" value="1">
+      </label>
+      <button id="mondrian-randomize" class="secondary" type="button">Randomize</button>
+      <button id="mondrian-draw" type="button">Draw mondrian</button>
+    </div>
+
+    <div class="gen-group">
+      <h3>Line walk</h3>
+      <label for="linewalk-spacing">Spacing
+        <input id="linewalk-spacing" type="range" min="8" max="60" step="1" value="30">
+        <output id="linewalk-spacing-out" for="linewalk-spacing">30</output>
+      </label>
+      <label for="linewalk-jitter">Jitter
+        <input id="linewalk-jitter" type="range" min="0" max="25" step="1" value="8">
+        <output id="linewalk-jitter-out" for="linewalk-jitter">8</output>
+      </label>
+      <label for="linewalk-seed">Seed
+        <input id="linewalk-seed" type="number" min="1" value="1">
+      </label>
+      <button id="linewalk-randomize" class="secondary" type="button">Randomize</button>
+      <button id="linewalk-draw" type="button">Draw line walk</button>
+    </div>
+
+    <div class="gen-group">
+      <h3>Reaction-diffusion</h3>
+      <label for="rd-feed">Feed rate
+        <input id="rd-feed" type="range" min="0.010" max="0.090" step="0.001" value="0.037">
+        <output id="rd-feed-out" for="rd-feed">0.037</output>
+      </label>
+      <label for="rd-kill">Kill rate
+        <input id="rd-kill" type="range" min="0.030" max="0.080" step="0.001" value="0.062">
+        <output id="rd-kill-out" for="rd-kill">0.062</output>
+      </label>
+      <label for="rd-iter">Iterations
+        <input id="rd-iter" type="range" min="300" max="2500" step="100" value="1000">
+        <output id="rd-iter-out" for="rd-iter">1000</output>
+      </label>
+      <label for="rd-seed">Seed
+        <input id="rd-seed" type="number" min="1" value="1">
+      </label>
+      <button id="rd-randomize" class="secondary" type="button">Randomize</button>
+      <button id="rd-run" type="button">Run reaction-diffusion</button>
+    </div>
+
+    <div class="gen-group">
+      <h3>Cyclic automata</h3>
+      <label for="ca-cell">Cell size
+        <input id="ca-cell" type="range" min="2" max="8" step="1" value="4">
+        <output id="ca-cell-out" for="ca-cell">4</output>
+      </label>
+      <label for="ca-states">States
+        <input id="ca-states" type="range" min="4" max="16" step="1" value="8">
+        <output id="ca-states-out" for="ca-states">8</output>
+      </label>
+      <label for="ca-iter">Iterations
+        <input id="ca-iter" type="range" min="20" max="400" step="10" value="150">
+        <output id="ca-iter-out" for="ca-iter">150</output>
+      </label>
+      <label for="ca-seed">Seed
+        <input id="ca-seed" type="number" min="1" value="1">
+      </label>
+      <button id="ca-randomize" class="secondary" type="button">Randomize</button>
+      <button id="ca-run" type="button">Run cyclic automata</button>
+    </div>
+
+    <div class="gen-group">
+      <h3>DLA</h3>
+      <label for="dla-particles">Particles
+        <input id="dla-particles" type="range" min="500" max="5000" step="100" value="2000">
+        <output id="dla-particles-out" for="dla-particles">2000</output>
+      </label>
+      <label for="dla-seed">Seed
+        <input id="dla-seed" type="number" min="1" value="1">
+      </label>
+      <button id="dla-randomize" class="secondary" type="button">Randomize</button>
+      <button id="dla-run" type="button">Run DLA</button>
+    </div>
+
+    <div class="gen-group">
+      <h3>Voronoi</h3>
+      <label for="voronoi-cells">Cells
+        <input id="voronoi-cells" type="range" min="20" max="120" step="5" value="60">
+        <output id="voronoi-cells-out" for="voronoi-cells">60</output>
+      </label>
+      <label for="voronoi-seed">Seed
+        <input id="voronoi-seed" type="number" min="1" value="1">
+      </label>
+      <button id="voronoi-randomize" class="secondary" type="button">Randomize</button>
+      <button id="voronoi-draw" type="button">Draw voronoi</button>
+    </div>
+  </section>
 
   <canvas id="board" width="900" height="600"></canvas>
 
