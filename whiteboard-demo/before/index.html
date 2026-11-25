@@ -43,8 +43,277 @@
     <button id="export-btn" type="button">Export PNG</button>
   </div>
 
-  <canvas id="board" width="900" height="600"></canvas>
+  <div class="workspace">
+    <canvas id="board" width="900" height="600"></canvas>
+
+    <aside id="guide">
+      <h2>What can I draw?</h2>
+      <p class="guide-sub">Pick a style, tune the prompt, then copy it into your AI agent.</p>
+
+      <section class="guide-section">
+        <h3>1 · Pick a style</h3>
+
+        <div class="style-tabs" role="tablist" aria-label="Art style">
+          <button type="button" class="style-tab" role="tab" id="tab-lewitt" aria-controls="pane-lewitt" aria-selected="true" data-tab="lewitt">LeWitt</button>
+          <button type="button" class="style-tab" role="tab" id="tab-mondrian" aria-controls="pane-mondrian" aria-selected="false" tabindex="-1" data-tab="mondrian">Mondrian</button>
+          <button type="button" class="style-tab" role="tab" id="tab-kandinsky" aria-controls="pane-kandinsky" aria-selected="false" tabindex="-1" data-tab="kandinsky">Kandinsky</button>
+          <button type="button" class="style-tab" role="tab" id="tab-picasso" aria-controls="pane-picasso" aria-selected="false" tabindex="-1" data-tab="picasso">Picasso</button>
+        </div>
+
+        <div class="style-pane" role="tabpanel" id="pane-lewitt" aria-labelledby="tab-lewitt" data-pane="lewitt" data-active="true">
+          <svg class="pane-thumb" viewBox="0 0 240 96" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="lw-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#2f6fd0"/>
+                <stop offset="0.5" stop-color="#3fae9a"/>
+                <stop offset="1" stop-color="#e8a33d"/>
+              </linearGradient>
+            </defs>
+            <rect width="240" height="96" fill="url(#lw-grad)"/>
+            <g stroke="#141414" stroke-width="1" opacity="0.6">
+              <line x1="30" y1="0" x2="30" y2="96"/><line x1="60" y1="0" x2="60" y2="96"/>
+              <line x1="90" y1="0" x2="90" y2="96"/><line x1="120" y1="0" x2="120" y2="96"/>
+              <line x1="150" y1="0" x2="150" y2="96"/><line x1="180" y1="0" x2="180" y2="96"/>
+              <line x1="210" y1="0" x2="210" y2="96"/>
+              <line x1="0" y1="24" x2="240" y2="24"/><line x1="0" y1="48" x2="240" y2="48"/>
+              <line x1="0" y1="72" x2="240" y2="72"/>
+            </g>
+            <g stroke="#141414" stroke-width="2.5" stroke-linecap="round">
+              <line x1="6" y1="12" x2="24" y2="12"/><line x1="45" y1="4" x2="45" y2="20"/>
+              <line x1="64" y1="4" x2="86" y2="20"/><line x1="116" y1="20" x2="94" y2="4"/>
+              <line x1="126" y1="36" x2="144" y2="36"/><line x1="165" y1="28" x2="165" y2="44"/>
+              <line x1="184" y1="28" x2="206" y2="44"/><line x1="94" y1="68" x2="116" y2="52"/>
+              <line x1="66" y1="60" x2="84" y2="60"/><line x1="135" y1="52" x2="135" y2="68"/>
+              <line x1="184" y1="52" x2="206" y2="68"/><line x1="96" y1="84" x2="114" y2="84"/>
+              <line x1="165" y1="76" x2="165" y2="92"/><line x1="6" y1="92" x2="24" y2="76"/>
+            </g>
+          </svg>
+          <div class="pane-head">
+            <h4 class="pane-name">Wall Drawing</h4>
+            <button type="button" class="copy" data-prompt="Draw a Sol LeWitt wall drawing: a 12×8 grid, one line per cell in one of four directions, tinted with a blue→orange gradient.">Copy prompt</button>
+          </div>
+          <div class="pb" data-template="Draw a Sol LeWitt wall drawing: a {grid} grid, one line per cell in one of four directions, {tint}.">
+            <div class="pb-fields">
+              <label class="pb-field">Grid
+                <select data-field="grid">
+                  <option value="12×8" selected>12×8</option>
+                  <option value="8×6">8×6</option>
+                  <option value="16×10">16×10</option>
+                </select>
+              </label>
+              <label class="pb-field">Tint
+                <select data-field="tint">
+                  <option value="tinted with a blue→orange gradient" selected>blue → orange</option>
+                  <option value="tinted with a teal→amber gradient">teal → amber</option>
+                  <option value="drawn in black on a white ground">monochrome</option>
+                </select>
+              </label>
+            </div>
+            <code class="pb-out"></code>
+          </div>
+        </div>
+
+        <div class="style-pane" role="tabpanel" id="pane-mondrian" aria-labelledby="tab-mondrian" data-pane="mondrian" data-active="false" hidden>
+          <svg class="pane-thumb" viewBox="0 0 240 96" preserveAspectRatio="none" aria-hidden="true">
+            <rect width="240" height="96" fill="#f7f5ef"/>
+            <rect x="0" y="0" width="62" height="32" fill="#e53935"/>
+            <rect x="134" y="34" width="54" height="30" fill="#1e63c9"/>
+            <rect x="62" y="66" width="70" height="30" fill="#f5c518"/>
+            <g stroke="#141414" stroke-width="5">
+              <line x1="62" y1="0" x2="62" y2="96"/><line x1="134" y1="0" x2="134" y2="96"/>
+              <line x1="188" y1="0" x2="188" y2="96"/>
+              <line x1="0" y1="32" x2="240" y2="32"/><line x1="0" y1="64" x2="240" y2="64"/>
+            </g>
+          </svg>
+          <div class="pane-head">
+            <h4 class="pane-name">Composition</h4>
+            <button type="button" class="copy" data-prompt="Draw a Mondrian composition on white: a 4×4 grid of thick black lines, filling a few cells in red, blue, yellow.">Copy prompt</button>
+          </div>
+          <div class="pb" data-template="Draw a Mondrian composition on white: a {grid} grid of thick black lines, filling a few cells in {palette}.">
+            <div class="pb-fields">
+              <label class="pb-field">Grid
+                <select data-field="grid">
+                  <option value="4×4" selected>4×4</option>
+                  <option value="5×5">5×5</option>
+                  <option value="6×4">6×4</option>
+                </select>
+              </label>
+              <label class="pb-field">Palette
+                <select data-field="palette">
+                  <option value="red, blue and yellow" selected>red / blue / yellow</option>
+                  <option value="red and blue only">red + blue</option>
+                  <option value="greys only">monochrome</option>
+                </select>
+              </label>
+            </div>
+            <code class="pb-out"></code>
+          </div>
+        </div>
+
+        <div class="style-pane" role="tabpanel" id="pane-kandinsky" aria-labelledby="tab-kandinsky" data-pane="kandinsky" data-active="false" hidden>
+          <svg class="pane-thumb" viewBox="0 0 240 96" preserveAspectRatio="none" aria-hidden="true">
+            <rect width="240" height="96" fill="#0d0d12"/>
+            <circle cx="150" cy="40" r="34" fill="#2a3a72"/>
+            <circle cx="150" cy="40" r="24" fill="#16161f"/>
+            <circle cx="78" cy="52" r="30" fill="#243a5e"/>
+            <circle cx="78" cy="52" r="21" fill="#2f5fd0"/>
+            <circle cx="78" cy="52" r="12" fill="#6b4a9e"/>
+            <circle cx="78" cy="52" r="6" fill="#a33a7d"/>
+            <circle cx="118" cy="18" r="9" fill="#e8a33d"/>
+            <circle cx="196" cy="70" r="7" fill="#a8243c"/>
+            <circle cx="204" cy="20" r="6" fill="#35b6c9"/>
+            <circle cx="30" cy="22" r="7" fill="#8a9a3a"/>
+            <circle cx="40" cy="82" r="5" fill="#e3d9c6"/>
+            <circle cx="126" cy="84" r="4" fill="#c99a2e"/>
+          </svg>
+          <div class="pane-head">
+            <h4 class="pane-name">Several Circles</h4>
+            <button type="button" class="copy" data-prompt="Draw a Kandinsky piece: a near-black ground with ~30 circles in cobalt, teal, amber, vermilion, violet, clustered near the centre.">Copy prompt</button>
+          </div>
+          <div class="pb" data-template="Draw a Kandinsky piece: a {ground} ground with ~{count} circles in {palette}, clustered near the centre.">
+            <div class="pb-fields">
+              <label class="pb-field">Circles
+                <input type="range" min="10" max="60" step="5" value="30" data-field="count">
+              </label>
+              <label class="pb-field">Palette
+                <select data-field="palette">
+                  <option value="cobalt, teal, amber, vermilion and violet" selected>cobalt / amber</option>
+                  <option value="cool blues and greens">cool</option>
+                  <option value="warm reds and oranges">warm</option>
+                </select>
+              </label>
+              <label class="pb-field">Ground
+                <select data-field="ground">
+                  <option value="near-black" selected>near-black</option>
+                  <option value="off-white">off-white</option>
+                  <option value="deep-grey">grey</option>
+                </select>
+              </label>
+            </div>
+            <code class="pb-out"></code>
+          </div>
+        </div>
+
+        <div class="style-pane" role="tabpanel" id="pane-picasso" aria-labelledby="tab-picasso" data-pane="picasso" data-active="false" hidden>
+          <svg class="pane-thumb" viewBox="0 0 240 96" preserveAspectRatio="none" aria-hidden="true">
+            <rect width="240" height="96" fill="#fdfcf8"/>
+            <g fill="#fff" stroke="#141414" stroke-width="2.5" stroke-linejoin="round">
+              <path d="M56 58 C 64 44, 86 38, 108 44 C 124 48, 132 56, 130 64 C 128 74, 114 78, 100 78 C 80 78, 60 70, 56 58 Z"/>
+              <path d="M100 46 C 108 28, 132 16, 154 20 C 150 36, 138 50, 118 54 Z"/>
+              <path d="M130 64 C 148 60, 166 58, 182 62 C 168 70, 150 76, 134 74 Z"/>
+              <path d="M56 58 L 40 54 L 55 64 Z"/>
+            </g>
+            <circle cx="66" cy="56" r="2.5" fill="#141414"/>
+            <g stroke="#2f6b3a" stroke-width="2" fill="none" stroke-linecap="round">
+              <path d="M40 54 C 34 60, 30 66, 26 74"/>
+            </g>
+            <g fill="#2f6b3a">
+              <ellipse cx="34" cy="62" rx="6" ry="3" transform="rotate(-30 34 62)"/>
+              <ellipse cx="28" cy="70" rx="5" ry="2.6" transform="rotate(-30 28 70)"/>
+              <ellipse cx="44" cy="60" rx="5" ry="2.6" transform="rotate(30 44 60)"/>
+            </g>
+          </svg>
+          <div class="pane-head">
+            <h4 class="pane-name">Dove of Peace</h4>
+            <button type="button" class="copy" data-prompt="Draw a dove in one continuous line, black ink on white, holding an olive branch — approximate curves with short straight segments.">Copy prompt</button>
+          </div>
+          <div class="pb" data-template="Draw {subject} in one continuous line, black ink on white, {detail} — approximate curves with short straight segments.">
+            <div class="pb-fields">
+              <label class="pb-field">Subject
+                <select data-field="subject">
+                  <option value="a dove" selected>dove</option>
+                  <option value="an owl">owl</option>
+                  <option value="a bull">bull</option>
+                  <option value="a camel">camel</option>
+                </select>
+              </label>
+              <label class="pb-field">Detail
+                <select data-field="detail">
+                  <option value="holding an olive branch" selected>olive branch</option>
+                  <option value="with no extra detail">plain</option>
+                </select>
+              </label>
+            </div>
+            <code class="pb-out"></code>
+          </div>
+        </div>
+      </section>
+    </aside>
+  </div>
 
   <script src="app.js"></script>
+  <script>
+    // Prompt builders: each pane's sentence is rebuilt from its inputs, and the
+    // Copy button always carries the current sentence.
+    document.querySelectorAll('.pb').forEach((pb) => {
+      const template = pb.dataset.template;
+      const fields = Array.from(pb.querySelectorAll('[data-field]'));
+      const out = pb.querySelector('.pb-out');
+      const copyBtn = pb.closest('.style-pane').querySelector('.copy');
+
+      const render = () => {
+        let text = template;
+        for (const field of fields) {
+          text = text.replaceAll(`{${field.dataset.field}}`, field.value);
+        }
+        out.textContent = text;
+        copyBtn.dataset.prompt = text;
+      };
+
+      for (const field of fields) {
+        field.addEventListener('input', render);
+        field.addEventListener('change', render);
+      }
+      render();
+    });
+
+    // Style tabs: click or arrow keys switch the visible pane.
+    const tabs = Array.from(document.querySelectorAll('.style-tab'));
+    const panes = Array.from(document.querySelectorAll('.style-pane'));
+
+    function selectTab(name) {
+      for (const tab of tabs) {
+        const on = tab.dataset.tab === name;
+        tab.setAttribute('aria-selected', String(on));
+        tab.tabIndex = on ? 0 : -1;
+      }
+      for (const pane of panes) {
+        const on = pane.dataset.pane === name;
+        pane.dataset.active = String(on);
+        pane.hidden = !on;
+      }
+    }
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => selectTab(tab.dataset.tab));
+      tab.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        const next = (i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+        tabs[next].focus();
+        selectTab(tabs[next].dataset.tab);
+      });
+    });
+
+    document.querySelectorAll('.copy').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const text = btn.dataset.prompt;
+        let ok = false;
+        try { await navigator.clipboard.writeText(text); ok = true; } catch (e) { ok = false; }
+        if (!ok) {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); } catch (e) {}
+          document.body.removeChild(ta);
+        }
+        btn.textContent = 'Copied';
+        setTimeout(() => { btn.textContent = 'Copy prompt'; }, 1500);
+      });
+    });
+  </script>
 </body>
 </html>
